@@ -1,0 +1,11 @@
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: kube-av
+subjects:
+- kind: ServiceAccount
+  name: kube-av
+roleRef:
+  kind: Role
+  name: kube-av
+  apiGroup: rbac.authorization.k8s.io
