@@ -3,7 +3,8 @@ kind: ScheduledVirusScan
 metadata:
   name: example-scheduledvirusscan
 spec:
-  schedule: "*/5 * * * *"
+  schedule: "*/1 * * * *"
+  historySize: 3
   template:
     spec:
       engine: ClamAV

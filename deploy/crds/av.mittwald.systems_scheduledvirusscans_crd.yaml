@@ -50,9 +50,16 @@ spec:
           spec:
             description: ScheduledVirusScanSpec defines the desired state of ScheduledVirusScan
             properties:
+              historySize:
+                description: HistorySize is the amount of VirusScan jobs that should
+                  be kept after completion.
+                type: integer
               schedule:
+                description: Schedule is a crontab schedule that describes how often
+                  a VirusScan resource should be created.
                 type: string
               template:
+                description: Template is the template for the actual VirusScan object.
                 properties:
                   metadata:
                     type: object

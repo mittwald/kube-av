@@ -7,7 +7,16 @@ import (
 
 // ScheduledVirusScanSpec defines the desired state of ScheduledVirusScan
 type ScheduledVirusScanSpec struct {
-	Schedule string            `json:"schedule"`
+	// Schedule is a crontab schedule that describes how often a VirusScan
+	// resource should be created.
+	Schedule string `json:"schedule"`
+
+	// HistorySize is the amount of VirusScan jobs that should be kept after
+	// completion.
+	// +optional
+	HistorySize *int `json:"historySize,omitempty"`
+
+	// Template is the template for the actual VirusScan object.
 	Template VirusScanTemplate `json:"template"`
 }
 

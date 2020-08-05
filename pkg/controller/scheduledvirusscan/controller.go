@@ -3,10 +3,14 @@ package scheduledvirusscan
 import (
 	"context"
 	"fmt"
+	"github.com/go-logr/logr"
 	"github.com/robfig/cron/v3"
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/tools/record"
 	"k8s.io/client-go/tools/reference"
+	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
+	"sort"
 
 	avv1beta1 "github.com/mittwald/kube-av/pkg/apis/av/v1beta1"
 	"k8s.io/apimachinery/pkg/api/errors"
@@ -22,10 +26,17 @@ import (
 
 var log = logf.Log.WithName("controller_scheduledvirusscan")
 
+const labelScheduledBy = "kubeav.mittwald.systems/scheduled-by"
+
 // Add creates a new ScheduledVirusScan Controller and adds it to the Manager. The Manager will set fields on the Controller
 // and Start it when the Manager is Started.
 func Add(mgr manager.Manager, rec record.EventRecorder, cr *cron.Cron) error {
 	return add(mgr, newReconciler(mgr, rec, cr))
+}
+
+type cronEntry struct {
+	entryID  cron.EntryID
+	schedule string
 }
 
 // newReconciler returns a new reconcile.Reconciler
@@ -35,7 +46,7 @@ func newReconciler(mgr manager.Manager, rec record.EventRecorder, cr *cron.Cron)
 		mgr.GetScheme(),
 		rec,
 		cr,
-		make(map[string]cron.EntryID),
+		make(map[string]cronEntry),
 	}
 }
 
@@ -76,7 +87,7 @@ type ReconcileScheduledVirusScan struct {
 	scheme      *runtime.Scheme
 	recorder    record.EventRecorder
 	cron        *cron.Cron
-	cronEntries map[string]cron.EntryID
+	cronEntries map[string]cronEntry
 }
 
 // Reconcile reads that state of the cluster for a ScheduledVirusScan object and makes changes based on the state read
@@ -101,10 +112,16 @@ func (r *ReconcileScheduledVirusScan) Reconcile(request reconcile.Request) (reco
 		return reconcile.Result{}, err
 	}
 
-	entryID, ok := r.cronEntries[request.NamespacedName.String()]
-	if ok {
-		r.cron.Remove(entryID)
+	if err := r.runGarbageCollection(ctx, &svs, reqLogger); err != nil {
+		return reconcile.Result{}, err
 	}
+
+	entry, ok := r.cronEntries[request.NamespacedName.String()]
+	if ok && entry.schedule == svs.Spec.Schedule {
+		return reconcile.Result{}, nil
+	}
+
+	r.cron.Remove(entry.entryID)
 
 	newEntryID, err := r.cron.AddFunc(svs.Spec.Schedule, func() {
 		svs := avv1beta1.ScheduledVirusScan{}
@@ -117,14 +134,26 @@ func (r *ReconcileScheduledVirusScan) Reconcile(request reconcile.Request) (reco
 
 		patch := client.MergeFrom(svs.DeepCopy())
 
+		labels := svs.Spec.Template.Labels
+		if labels == nil {
+			labels = make(map[string]string)
+		}
+
+		labels[labelScheduledBy] = svs.Name
+
 		vs := avv1beta1.VirusScan{
 			ObjectMeta: metav1.ObjectMeta{
 				GenerateName: fmt.Sprintf("%s-", svs.Name),
 				Namespace:    svs.Namespace,
-				Labels:       svs.Spec.Template.Labels,
+				Labels:       labels,
 				Annotations:  svs.Spec.Template.Annotations,
 			},
 			Spec: svs.Spec.Template.Spec,
+		}
+
+		if err := controllerutil.SetControllerReference(&svs, &vs, r.scheme); err != nil {
+			reqLogger.Error(err, "error while setting OwnerReference on VirusScan")
+			return
 		}
 
 		if err := r.client.Create(ctx, &vs); err != nil {
@@ -153,7 +182,45 @@ func (r *ReconcileScheduledVirusScan) Reconcile(request reconcile.Request) (reco
 		return reconcile.Result{}, err
 	}
 
-	r.cronEntries[request.NamespacedName.String()] = newEntryID
+	r.cronEntries[request.NamespacedName.String()] = cronEntry{entryID: newEntryID, schedule: svs.Spec.Schedule}
 
 	return reconcile.Result{}, nil
+}
+
+func (r *ReconcileScheduledVirusScan) runGarbageCollection(ctx context.Context, svs *avv1beta1.ScheduledVirusScan, l logr.Logger) error {
+	vs := avv1beta1.VirusScanList{}
+
+	if err := r.client.List(ctx, &vs, client.InNamespace(svs.Namespace), client.MatchingLabels{labelScheduledBy: svs.Name}); err != nil {
+		return err
+	}
+
+	limit := 5
+	if l := svs.Spec.HistorySize; l != nil {
+		limit = *l
+	}
+
+	deletionCandidates := make(scanList, 0, len(vs.Items))
+	for i := range vs.Items {
+		if vs.Items[i].Status.GetCondition(avv1beta1.VirusScanConditionTypeCompleted) == corev1.ConditionTrue {
+			deletionCandidates = append(deletionCandidates, vs.Items[i])
+		}
+	}
+
+	l.Info("determined candidates for garbage collection", "candidate.count", len(deletionCandidates))
+
+	if len(deletionCandidates) <= limit {
+		return nil
+	}
+
+	sort.Sort(sort.Reverse(deletionCandidates))
+
+	toDelete := deletionCandidates[limit:]
+	for i := range toDelete {
+		l.Info("deleting VirusScan", "virusscan.name", toDelete[i].Name)
+		if err := r.client.Delete(ctx, &toDelete[i]); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
