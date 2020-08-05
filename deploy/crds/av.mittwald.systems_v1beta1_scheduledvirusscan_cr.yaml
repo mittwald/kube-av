@@ -1,0 +1,7 @@
+apiVersion: av.mittwald.systems/v1beta1
+kind: ScheduledVirusScan
+metadata:
+  name: example-scheduledvirusscan
+spec:
+  # Add fields here
+  size: 3

@@ -5,6 +5,9 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"github.com/mittwald/kube-av/pkg/controller/updater"
+	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/tools/record"
 	"os"
 	"runtime"
 	"strings"
@@ -26,6 +29,7 @@ import (
 	"github.com/spf13/pflag"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
+	typedv1 "k8s.io/client-go/kubernetes/typed/core/v1"
 	"sigs.k8s.io/controller-runtime/pkg/cache"
 	"sigs.k8s.io/controller-runtime/pkg/client/config"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
@@ -70,6 +74,16 @@ func main() {
 	logf.SetLogger(zap.Logger())
 
 	printVersion()
+
+	operatorName := "kubeav"
+	if o := os.Getenv("OPERATOR_NAME"); o != "" {
+		operatorName = o
+	}
+
+	operatorNamespace := "kubeav-system"
+	if n := os.Getenv("OPERATOR_NAMESPACE"); n != "" {
+		operatorNamespace = n
+	}
 
 	namespace, err := k8sutil.GetWatchNamespace()
 	if err != nil {
@@ -122,8 +136,26 @@ func main() {
 		os.Exit(1)
 	}
 
+	// Build raw Kubernetes client -- needed for logging and metrics access
+	// see https://github.com/operator-framework/operator-sdk/blob/master/doc/user/client.md#non-default-client
+	cl, err := kubernetes.NewForConfig(mgr.GetConfig())
+	if err != nil {
+		log.Error(err, "error while setting up Kubernetes client")
+		os.Exit(1)
+	}
+
+	b := record.NewBroadcaster()
+	b.StartLogging(func(format string, args ...interface{}) {
+		log.Info(fmt.Sprintf(format, args...))
+	})
+	b.StartRecordingToSink(&typedv1.EventSinkImpl{
+		Interface: cl.CoreV1().Events(""),
+	})
+
+	r := b.NewRecorder(mgr.GetScheme(), v1.EventSource{Host: os.Getenv("NODE_NAME"), Component: operatorName})
+
 	// Setup all Controllers
-	if err := controller.AddToManager(mgr); err != nil {
+	if err := controller.AddToManager(mgr, r); err != nil {
 		log.Error(err, "")
 		os.Exit(1)
 	}
@@ -132,6 +164,12 @@ func main() {
 	addMetrics(ctx, cfg)
 
 	log.Info("Starting the Cmd.")
+
+	updaterController := updater.NewUpdaterController(mgr.GetClient(), log, operatorNamespace)
+	if err := mgr.Add(updaterController); err != nil {
+		log.Error(err, "error while registering updater controller")
+		os.Exit(1)
+	}
 
 	// Start the Cmd
 	if err := mgr.Start(signals.SetupSignalHandler()); err != nil {

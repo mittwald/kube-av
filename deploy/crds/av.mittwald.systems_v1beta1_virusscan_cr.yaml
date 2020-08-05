@@ -1,0 +1,11 @@
+apiVersion: av.mittwald.systems/v1beta1
+kind: VirusScan
+metadata:
+  name: example-virusscan
+spec:
+  engine: ClamAV
+  targets:
+    - volume:
+        hostPath:
+          path: /
+      subPath: root/virus

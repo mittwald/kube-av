@@ -1,0 +1,31 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kubeav:agent
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+  - update
+  - list
+  - get
+  - watch
+- apiGroups:
+  - av.mittwald.systems
+  resources:
+  - virusscans
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - av.mittwald.systems
+  resources:
+  - virusscans/status
+  verbs:
+  - patch
+  - update

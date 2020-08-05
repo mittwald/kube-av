@@ -1,0 +1,4 @@
+// Package v1beta1 contains API Schema definitions for the av v1beta1 API group
+// +k8s:deepcopy-gen=package,register
+// +groupName=av.mittwald.systems
+package v1beta1
