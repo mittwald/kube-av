@@ -105,6 +105,12 @@ func main() {
 			fmt.Printf("%#v\n", scan)
 			fmt.Printf("%+v\n", result)
 
+			r.Eventf(&scan, corev1.EventTypeNormal, "ScanComplete", "AV scan completed")
+
+			if len(result.InfectedFiles) > 0 {
+				r.Eventf(&scan, corev1.EventTypeWarning, "InfectionFound", "found %d infected files", len(result.InfectedFiles))
+			}
+
 			patch := virusscan.PatchVirusScanResult{ScanReport: result}
 			if err := client.Status().Patch(context.Context, &scan, &patch); err != nil {
 				return err

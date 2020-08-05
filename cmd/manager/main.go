@@ -6,6 +6,8 @@ import (
 	"flag"
 	"fmt"
 	"github.com/mittwald/kube-av/pkg/controller/updater"
+	"github.com/mittwald/kube-av/pkg/util"
+	"github.com/robfig/cron/v3"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/record"
 	"os"
@@ -154,8 +156,15 @@ func main() {
 
 	r := b.NewRecorder(mgr.GetScheme(), v1.EventSource{Host: os.Getenv("NODE_NAME"), Component: operatorName})
 
+	c := cron.New()
+
+	if err := mgr.Add(util.NewCronRunnable(c)); err != nil {
+		log.Error(err, "error while registering cron runnable")
+		os.Exit(1)
+	}
+
 	// Setup all Controllers
-	if err := controller.AddToManager(mgr, r); err != nil {
+	if err := controller.AddToManager(mgr, r, c); err != nil {
 		log.Error(err, "")
 		os.Exit(1)
 	}

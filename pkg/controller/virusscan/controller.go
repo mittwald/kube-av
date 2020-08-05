@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	avv1beta1 "github.com/mittwald/kube-av/pkg/apis/av/v1beta1"
+	"github.com/robfig/cron/v3"
 	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
@@ -23,7 +24,7 @@ var log = logf.Log.WithName("controller_virusscan")
 
 // Add creates a new VirusScan Controller and adds it to the Manager. The Manager will set fields on the Controller
 // and Start it when the Manager is Started.
-func Add(mgr manager.Manager, rec record.EventRecorder) error {
+func Add(mgr manager.Manager, rec record.EventRecorder, _ *cron.Cron) error {
 	return add(mgr, newReconciler(mgr, rec))
 }
 

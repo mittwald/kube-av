@@ -3,5 +3,12 @@ kind: ScheduledVirusScan
 metadata:
   name: example-scheduledvirusscan
 spec:
-  # Add fields here
-  size: 3
+  schedule: "*/5 * * * *"
+  template:
+    spec:
+      engine: ClamAV
+      targets:
+        - volume:
+            hostPath:
+              path: /
+          subPath: root/virus

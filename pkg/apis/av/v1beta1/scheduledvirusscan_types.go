@@ -1,6 +1,7 @@
 package v1beta1
 
 import (
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -12,13 +13,25 @@ type ScheduledVirusScanSpec struct {
 
 // ScheduledVirusScanStatus defines the observed state of ScheduledVirusScan
 type ScheduledVirusScanStatus struct {
+	// LastScheduledScan is a reference to the last VirusScan object created
+	// from this ScheduledVirusScan instance.
+	// +optional
+	LastScheduledScan *corev1.ObjectReference `json:"lastScheduledScan,omitempty"`
+
+	// LastScheduledTime is the time at which the last VirusScan was scheduled
+	// +optional
+	LastScheduledTime *metav1.Time `json:"lastScheduledTime,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // ScheduledVirusScan is the Schema for the scheduledvirusscans API
 // +kubebuilder:subresource:status
-// +kubebuilder:resource:path=scheduledvirusscans,scope=Namespaced
+// +kubebuilder:resource:path=scheduledvirusscans,scope=Namespaced,shortName=svs
+// +kubebuilder:printcolumn:name="Schedule",type="string",JSONPath=".spec.schedule",description="The schedule after which the virus scan should be scheduled"
+// +kubebuilder:printcolumn:name="Last scan",type="string",JSONPath=".status.lastScheduledScan.name",description="The latest scan created from this scheduled scan"
+// +kubebuilder:printcolumn:name="Last scheduled",type="date",JSONPath=".status.lastScheduledTime",description="Tells when this scan was last scheduled"
+// +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type ScheduledVirusScan struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
