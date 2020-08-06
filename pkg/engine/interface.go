@@ -17,7 +17,7 @@ type ScanEngine interface {
 type ErrUnknownEngine avv1beta1.ScanEngine
 
 func (e ErrUnknownEngine) Error() string {
-	return fmt.Sprintf("unknown AV scan engine: %s", e)
+	return fmt.Sprintf("unknown AV scan engine: %s", string(e))
 }
 
 type ScanReportItem struct {
