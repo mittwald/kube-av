@@ -1,13 +1,15 @@
 project_name: kube-av
 builds:
-  - env:
+  - id: kubeav
+    env:
       - CGO_ENABLED=0
       - GO111MODULE=on
     binary: kubeav
     main: ./cmd/manager/main.go
     goos: [linux]
     goarch: [amd64]
-  - env:
+  - id: kubeav-agent
+    env:
       - CGO_ENABLED=0
       - GO111MODULE=on
     binary: kubeav-agent
