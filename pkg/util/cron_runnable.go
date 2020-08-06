@@ -16,12 +16,10 @@ func (c *CronRunnable) Start(i <-chan struct{}) error {
 	<-i
 	stopCtx := c.cron.Stop()
 
-	<- stopCtx.Done()
+	<-stopCtx.Done()
 	return nil
 }
 
 func (c *CronRunnable) NeedLeaderElection() bool {
 	return true
 }
-
-

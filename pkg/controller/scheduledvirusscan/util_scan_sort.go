@@ -15,4 +15,3 @@ func (s scanList) Less(i, j int) bool {
 func (s scanList) Swap(i, j int) {
 	s[i], s[j] = s[j], s[i]
 }
-

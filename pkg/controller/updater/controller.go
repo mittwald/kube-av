@@ -2,6 +2,8 @@ package updater
 
 import (
 	"context"
+	"time"
+
 	"github.com/go-logr/logr"
 	"github.com/mittwald/kube-av/pkg/labels"
 	appsv1 "k8s.io/api/apps/v1"
@@ -13,7 +15,6 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
-	"time"
 )
 
 type UpdaterController struct {

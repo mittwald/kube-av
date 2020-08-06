@@ -2,6 +2,10 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
+	"strings"
+
 	kubeavapis "github.com/mittwald/kube-av/pkg/apis"
 	avv1beta1 "github.com/mittwald/kube-av/pkg/apis/av/v1beta1"
 	"github.com/mittwald/kube-av/pkg/controller/virusscan"
@@ -14,11 +18,8 @@ import (
 	"k8s.io/client-go/kubernetes/scheme"
 	typedv1 "k8s.io/client-go/kubernetes/typed/core/v1"
 	"k8s.io/client-go/tools/record"
-	"log"
-	"os"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/client/config"
-	"strings"
 )
 
 func main() {

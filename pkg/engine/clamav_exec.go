@@ -3,12 +3,13 @@ package engine
 import (
 	"bytes"
 	"context"
-	avv1beta1 "github.com/mittwald/kube-av/pkg/apis/av/v1beta1"
 	"io"
 	"os"
 	"os/exec"
 	"regexp"
 	"strings"
+
+	avv1beta1 "github.com/mittwald/kube-av/pkg/apis/av/v1beta1"
 )
 
 var matchRE *regexp.Regexp
@@ -51,7 +52,7 @@ func (c *clamAVEngine) Execute(ctx context.Context, scan *avv1beta1.VirusScan, s
 		}
 
 		item := ScanReportItem{
-			FilePath: match[1],
+			FilePath:         match[1],
 			MatchedSignature: match[2],
 		}
 

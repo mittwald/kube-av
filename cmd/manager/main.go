@@ -5,14 +5,15 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"os"
+	"runtime"
+	"strings"
+
 	"github.com/mittwald/kube-av/pkg/controller/updater"
 	"github.com/mittwald/kube-av/pkg/util"
 	"github.com/robfig/cron/v3"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/record"
-	"os"
-	"runtime"
-	"strings"
 
 	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
 	_ "k8s.io/client-go/plugin/pkg/client/auth"

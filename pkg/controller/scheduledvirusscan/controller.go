@@ -3,6 +3,8 @@ package scheduledvirusscan
 import (
 	"context"
 	"fmt"
+	"sort"
+
 	"github.com/go-logr/logr"
 	"github.com/robfig/cron/v3"
 	corev1 "k8s.io/api/core/v1"
@@ -10,7 +12,6 @@ import (
 	"k8s.io/client-go/tools/record"
 	"k8s.io/client-go/tools/reference"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
-	"sort"
 
 	avv1beta1 "github.com/mittwald/kube-av/pkg/apis/av/v1beta1"
 	"k8s.io/apimachinery/pkg/api/errors"

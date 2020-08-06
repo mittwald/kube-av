@@ -3,6 +3,8 @@ package virusscan
 import (
 	"context"
 	"fmt"
+	"reflect"
+
 	avv1beta1 "github.com/mittwald/kube-av/pkg/apis/av/v1beta1"
 	"github.com/robfig/cron/v3"
 	batchv1 "k8s.io/api/batch/v1"
@@ -10,7 +12,6 @@ import (
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/tools/record"
-	"reflect"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller"
 	"sigs.k8s.io/controller-runtime/pkg/handler"

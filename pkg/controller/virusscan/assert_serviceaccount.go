@@ -2,6 +2,7 @@ package virusscan
 
 import (
 	"context"
+
 	avv1beta1 "github.com/mittwald/kube-av/pkg/apis/av/v1beta1"
 	corev1 "k8s.io/api/core/v1"
 	rbacv1 "k8s.io/api/rbac/v1"

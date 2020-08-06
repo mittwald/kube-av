@@ -3,6 +3,7 @@ package virusscan
 import (
 	"encoding/json"
 	"fmt"
+
 	avv1beta1 "github.com/mittwald/kube-av/pkg/apis/av/v1beta1"
 	"github.com/mittwald/kube-av/pkg/engine"
 	corev1 "k8s.io/api/core/v1"

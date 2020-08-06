@@ -3,6 +3,7 @@ package virusscan
 import (
 	"context"
 	"fmt"
+
 	"github.com/go-logr/logr"
 	avv1beta1 "github.com/mittwald/kube-av/pkg/apis/av/v1beta1"
 	"github.com/mittwald/kube-av/pkg/engine"
@@ -38,7 +39,7 @@ func (r *ReconcileVirusScan) reconcilePending(ctx context.Context, s *avv1beta1.
 	}
 
 	container := corev1.Container{
-		Name:  "av",
+		Name: "av",
 		Args: []string{
 			"--engine", eng.Name(),
 			"--scan-ref", fmt.Sprintf("%s/%s", s.Namespace, s.Name),
