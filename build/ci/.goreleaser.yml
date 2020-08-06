@@ -1,0 +1,60 @@
+project_name: kube-av
+builds:
+  - env:
+      - CGO_ENABLED=0
+      - GO111MODULE=on
+    binary: kubeav
+    main: ./cmd/manager/main.go
+    goos: [linux]
+    goarch: [amd64]
+  - env:
+      - CGO_ENABLED=0
+      - GO111MODULE=on
+    binary: kubeav-agent
+    main: ./cmd/agent/main.go
+    goos: [linux]
+    goarch: [amd64]
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+dockers:
+  - image_templates:
+      - quay.io/mittwald/kubeav:latest
+      - quay.io/mittwald/kubeav:v{{ .Major }}
+      - quay.io/mittwald/kubeav:v{{ .Major }}.{{ .Minor }}
+      - quay.io/mittwald/kubeav:{{ .Tag }}
+      - quay.io/mittwald/kubeav:stable
+    dockerfile: build/package/docker/operator.Dockerfile
+    extra_files:
+      - build/bin
+    binaries:
+      - kubeav
+    goos: linux
+    goarch: amd64
+  - image_templates:
+      - quay.io/mittwald/kubeav-agent-clamav:latest
+      - quay.io/mittwald/kubeav-agent-clamav:v{{ .Major }}
+      - quay.io/mittwald/kubeav-agent-clamav:v{{ .Major }}.{{ .Minor }}
+      - quay.io/mittwald/kubeav-agent-clamav:{{ .Tag }}
+      - quay.io/mittwald/kubeav-agent-clamav:stable
+    dockerfile: build/package/docker/agent-clamav.Dockerfile
+    binaries:
+      - kubeav-agent
+    goos: linux
+    goarch: amd64
+  - image_templates:
+      - quay.io/mittwald/kubeav-updater-clamav:latest
+      - quay.io/mittwald/kubeav-updater-clamav:v{{ .Major }}
+      - quay.io/mittwald/kubeav-updater-clamav:v{{ .Major }}.{{ .Minor }}
+      - quay.io/mittwald/kubeav-updater-clamav:{{ .Tag }}
+      - quay.io/mittwald/kubeav-updater-clamav:stable
+    dockerfile: build/package/docker/updater-clamav.Dockerfile
+    goos: linux
+    goarch: amd64
