@@ -25,12 +25,38 @@ KubeAV is a Kubernetes operator that automates malware detection on Kubernetes. 
 
 ## Installation
 
-## CR overview
+## Architecture
 
-This operator introduces two new custom resources:
+This operator consists of several components:
 
-- `virusscans.av.mittwald.systems`
-- `scheduledvirusscans.av.mittwald.systems`
+- The _KubeAV operator_ runs the main controller loop. It watches for `VirusScan` and `ScheduledVirusScan` resources created by users (or itself).
+- The _KubeAV updater_ is a `DaemonSet` that is created by the manager to run on every node. It maintains a local copy of the ClamAV database on each node in your cluster.
+- The _KubeAV agent_ is run in `Job` resources that are managed by creating a `VirusScan` custom resource. The agent contains the actual virus scanner which uses the signature database which is maintained by the updater.
+
+```
+                            ┌────────────────┐
+              creates       │ KubeAV updater │
+           ┌───────────────▶│   (DaemonSet)  │
+           │                └────────────────┘
+┌──────────┴──────┐
+│ KubeAV operator │
+└──────────┬──────┘
+           │  creates       ┌───────────────────┐                           ┌──────────────┐
+  ┌────────────────────────▶|     VirusScan     ├──────────────────────────▶│ KubeAV agent │
+  │        ├───────────────▶| (Custom Resource) │  creates (via operator)   │    (Job)     │
+  │        │  watches       └───────────────────┘                           └──────────────┘
+  │        │                          ▲
+  │        │                          │ creates (via operator)
+  │        │                          │
+  │        │  creates       ┌─────────┴──────────┐
+  ├────────────────────────▶│ ScheduledVirusScan │
+  │        └───────────────▶│ (Custom Resource)  │
+  │           watches       └────────────────────┘
+
+  O
+ /|\ User
+ / \
+```
 
 ## Usage
 
@@ -61,6 +87,14 @@ spec:
 A `VirusScan` resource will be mapped to a `Job` (of the `batch/v1` API group), which will in turn result in a Pod that runs the configured AV engine and that has all the specified volumes mounted.
 
 The results of the AV scan will be written back into the `.status` property of the `VirusScan` resource:
+
+```console
+$ kubectl get virusscans
+NAME                SUMMARY                        SCHEDULED   COMPLETED   AGE
+example-virusscan   Completed (1 infected files)   44s         11s         44s
+```
+
+The `.status.scanResults` property in the CR lists the individual files found by the scanner:
 
 ```yaml
 apiVersion: av.mittwald.systems/v1beta1
