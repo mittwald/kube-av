@@ -97,7 +97,7 @@ func main() {
 				return errors.Wrap(err, "error while loading AV engine")
 			}
 
-			result, err := eng.Execute(context.Context, &scan, scanDirs)
+			result, err := eng.Execute(ctx, &scan, scanDirs)
 			if err != nil {
 				return err
 			}
@@ -113,7 +113,7 @@ func main() {
 			}
 
 			patch := virusscan.PatchVirusScanResult{ScanReport: result}
-			if err := client.Status().Patch(context.Context, &scan, &patch); err != nil {
+			if err := client.Status().Patch(ctx, &scan, &patch); err != nil {
 				return err
 			}
 

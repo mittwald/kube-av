@@ -15,6 +15,7 @@ func (c *clamAVEngine) Name() string {
 func (c *clamAVEngine) AdviseJob(job *batchv1.Job) error {
 	container := &job.Spec.Template.Spec.Containers[0]
 
+	// TODO: get imageName from CR/flags?
 	container.Image = "quay.io/mittwald/kubeav-agent-clamav:v1"
 	container.VolumeMounts = append(container.VolumeMounts, corev1.VolumeMount{
 		Name:      "clamdb",

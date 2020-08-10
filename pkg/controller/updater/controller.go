@@ -117,7 +117,7 @@ func (u *UpdaterController) reconcile(ctx context.Context) (reconcile.Result, er
 
 	c := corev1.Container{}
 	c.Name = "kubeav-updater"
-	c.Image = "quay.io/mittwald/kubeav-updater-clamav:v1"
+	c.Image = "quay.io/mittwald/kubeav-updater-clamav:v1" // TODO: image name from CR/flags
 	c.ImagePullPolicy = corev1.PullIfNotPresent
 	c.VolumeMounts = []corev1.VolumeMount{{
 		Name:      "clamdb",
