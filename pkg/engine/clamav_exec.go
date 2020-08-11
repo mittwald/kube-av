@@ -44,7 +44,11 @@ func (c *clamAVEngine) Execute(ctx context.Context, _ *avv1beta1.VirusScan, scan
 
 	report := ScanReport{}
 
-	// TODO: conditional?, if exitcode == 0, nothing has been found?
+	// early exit in case no matches were found
+	if cmd.ProcessState != nil && cmd.ProcessState.ExitCode() == 0 {
+		return &report, nil
+	}
+
 	outputLines := strings.Split(stdout.String(), "\n")
 	for i := range outputLines {
 		match := matchRE.FindStringSubmatch(outputLines[i])
