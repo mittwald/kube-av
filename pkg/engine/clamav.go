@@ -15,8 +15,7 @@ func (c *clamAVEngine) Name() string {
 func (c *clamAVEngine) AdviseJob(job *batchv1.Job) error {
 	container := &job.Spec.Template.Spec.Containers[0]
 
-	// TODO: get imageName from CR/flags?
-	container.Image = "quay.io/mittwald/kubeav-agent-clamav:v1"
+	container.Image = ClamavAgentImage
 	container.VolumeMounts = append(container.VolumeMounts, corev1.VolumeMount{
 		Name:      "clamdb",
 		MountPath: "/var/lib/clamav",
@@ -28,7 +27,7 @@ func (c *clamAVEngine) AdviseJob(job *batchv1.Job) error {
 			Name: "clamdb",
 			VolumeSource: corev1.VolumeSource{
 				HostPath: &corev1.HostPathVolumeSource{
-					Path: "/var/lib/clamav",
+					Path: ClamavLibraryHostPath,
 				},
 			},
 		},

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"github.com/mittwald/kube-av/pkg/engine"
 	"os"
 	"runtime"
 	"strings"
@@ -63,6 +64,8 @@ func main() {
 	// Add flags registered by imported packages (e.g. glog and
 	// controller-runtime)
 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
+
+	pflag.CommandLine.AddFlagSet(engine.FlagSet())
 
 	pflag.Parse()
 

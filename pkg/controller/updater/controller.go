@@ -2,6 +2,7 @@ package updater
 
 import (
 	"context"
+	"github.com/mittwald/kube-av/pkg/engine"
 	"time"
 
 	"github.com/go-logr/logr"
@@ -117,7 +118,7 @@ func (u *UpdaterController) reconcile(ctx context.Context) (reconcile.Result, er
 
 	c := corev1.Container{}
 	c.Name = "kubeav-updater"
-	c.Image = "quay.io/mittwald/kubeav-updater-clamav:v1" // TODO: image name from CR/flags
+	c.Image = engine.ClamavUpdaterImage
 	c.ImagePullPolicy = corev1.PullIfNotPresent
 	c.VolumeMounts = []corev1.VolumeMount{{
 		Name:      "clamdb",
@@ -129,14 +130,12 @@ func (u *UpdaterController) reconcile(ctx context.Context) (reconcile.Result, er
 	c.Args = []string{"--config-file", "/etc/kubeav/freshclam.conf"}
 	c.Resources = corev1.ResourceRequirements{
 		Requests: map[corev1.ResourceName]resource.Quantity{
-			corev1.ResourceCPU:    resource.MustParse("50m"),
-			corev1.ResourceMemory: resource.MustParse("128Mi"),
+			corev1.ResourceCPU:    engine.ClamavUpdaterCPURequest.Quantity,
+			corev1.ResourceMemory: engine.ClamavUpdaterMemoryRequest.Quantity,
 		},
 		Limits: map[corev1.ResourceName]resource.Quantity{
-			corev1.ResourceCPU: resource.MustParse("200m"),
-
-			// ClamAV is thirsty
-			corev1.ResourceMemory: resource.MustParse("192Mi"),
+			corev1.ResourceCPU:    engine.ClamavUpdaterCPULimit.Quantity,
+			corev1.ResourceMemory: engine.ClamavUpdaterMemoryLimit.Quantity,
 		},
 	}
 
@@ -157,7 +156,7 @@ func (u *UpdaterController) reconcile(ctx context.Context) (reconcile.Result, er
 		Name: "clamdb",
 		VolumeSource: corev1.VolumeSource{
 			HostPath: &corev1.HostPathVolumeSource{
-				Path: "/var/lib/clamav",
+				Path: engine.ClamavLibraryHostPath,
 			},
 		},
 	}, {
