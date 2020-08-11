@@ -148,3 +148,8 @@ spec:
 ```
 
 For these resources, KubeAV will create new `VirusScan` resources from the configured template at the specified interval.
+
+## Future features
+
+- [ ] Alerting (maybe by adding a metric for counting infected files? Or by directly integrating something like the Prometheus alert manager)
+- [ ] [On-Access Scanning](https://www.clamav.net/documents/on-access-scanning) (Todo: determine feasibility in containerized environment)
