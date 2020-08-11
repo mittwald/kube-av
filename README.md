@@ -16,10 +16,11 @@ KubeAV is a Kubernetes operator that automates malware detection on Kubernetes. 
 
 
 - [Installation](#installation)
-- [CR overview](#cr-overview)
+- [Architecture](#architecture)
 - [Usage](#usage)
   - [Starting an AV scan on demand](#starting-an-av-scan-on-demand)
   - [Scheduling an AV scan for periodic execution](#scheduling-an-av-scan-for-periodic-execution)
+- [Future features](#future-features)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
