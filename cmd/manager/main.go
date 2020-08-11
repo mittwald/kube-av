@@ -9,6 +9,8 @@ import (
 	"runtime"
 	"strings"
 
+	"github.com/mittwald/kube-av/pkg/engine"
+
 	"github.com/mittwald/kube-av/pkg/controller/updater"
 	"github.com/mittwald/kube-av/pkg/util"
 	"github.com/robfig/cron/v3"
@@ -63,6 +65,8 @@ func main() {
 	// Add flags registered by imported packages (e.g. glog and
 	// controller-runtime)
 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
+
+	pflag.CommandLine.AddFlagSet(engine.FlagSet())
 
 	pflag.Parse()
 

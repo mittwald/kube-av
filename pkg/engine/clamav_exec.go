@@ -18,7 +18,7 @@ func init() {
 	matchRE = regexp.MustCompile(`^(.*): (.*) FOUND$`)
 }
 
-func (c *clamAVEngine) Execute(ctx context.Context, scan *avv1beta1.VirusScan, scanDirs []string) (*ScanReport, error) {
+func (c *clamAVEngine) Execute(ctx context.Context, _ *avv1beta1.VirusScan, scanDirs []string) (*ScanReport, error) {
 	stdout := bytes.Buffer{}
 
 	args := []string{"-i", "--no-summary"}
@@ -43,6 +43,11 @@ func (c *clamAVEngine) Execute(ctx context.Context, scan *avv1beta1.VirusScan, s
 	}
 
 	report := ScanReport{}
+
+	// early exit in case no matches were found
+	if cmd.ProcessState != nil && cmd.ProcessState.ExitCode() == 0 {
+		return &report, nil
+	}
 
 	outputLines := strings.Split(stdout.String(), "\n")
 	for i := range outputLines {
