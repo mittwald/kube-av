@@ -5,10 +5,11 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"github.com/mittwald/kube-av/pkg/engine"
 	"os"
 	"runtime"
 	"strings"
+
+	"github.com/mittwald/kube-av/pkg/engine"
 
 	"github.com/mittwald/kube-av/pkg/controller/updater"
 	"github.com/mittwald/kube-av/pkg/util"

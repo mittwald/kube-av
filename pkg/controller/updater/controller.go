@@ -2,8 +2,9 @@ package updater
 
 import (
 	"context"
-	"github.com/mittwald/kube-av/pkg/engine"
 	"time"
+
+	"github.com/mittwald/kube-av/pkg/engine"
 
 	"github.com/go-logr/logr"
 	"github.com/mittwald/kube-av/pkg/labels"
