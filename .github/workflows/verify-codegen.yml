@@ -26,7 +26,7 @@ jobs:
         run: |
           operator-sdk generate k8s
           operator-sdk generate crds
-          cp deploy/crds/*_crd.yaml deploy/helm-chards/kubeav/crds/
+          cp deploy/crds/*_crd.yaml deploy/helm-charts/kubeav/crds/
 
       - name: Test diff
         run: |
