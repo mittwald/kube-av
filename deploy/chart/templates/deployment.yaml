@@ -15,29 +15,46 @@ spec:
     metadata:
       labels: {{- include "chart.selectorLabels" . | nindent 8 }}
     spec:
-    {{- with .Values.imagePullSecrets }}
+      {{- with .Values.imagePullSecrets }}
       imagePullSecrets: {{- toYaml . | nindent 8 }}
-    {{- end }}
+      {{- end }}
       serviceAccountName: {{ include "chart.fullname" . }}
-      securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- with .Values.podSecurityContext }}
+      securityContext: {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext: {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:v{{ .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            {{- if .Values.clamav.enable }}
+            - --engine-clamav-agent-image
+            - {{ .Values.clamav.agent.image.repository }}:{{ .Chart.AppVersion }}
+            - --engine-clamav-updater-image
+            {{- with .Values.clamav.updater }}
+            - {{ .image.repository }}:{{ $.Chart.AppVersion }}
+            - --engine-clamav-updater-cpu-request
+            - {{ .resources.requests.cpu | quote}}
+            - --engine-clamav-updater-cpu-limit
+            - {{ .resources.limits.cpu | quote}}
+            - --engine-clamav-updater-memory-request
+            - {{ .resources.requests.memory | quote}}
+            - --engine-clamav-updater-memory-limit
+            - {{ .resources.limits.memory | quote}}
+            {{- end }}
+            {{- end }}
           env:
             - name: OPERATOR_NAME
               value: kubeav
             - name: OPERATOR_NAMESPACE
               value: {{ .Release.Namespace }}
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
+            - name: WATCH_NAMESPACE
+              value: "" # TODO: make this configurable!
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
           resources: {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector: {{- toYaml . | nindent 8 }}
