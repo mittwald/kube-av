@@ -26,7 +26,14 @@ KubeAV is a Kubernetes operator that automates malware detection on Kubernetes. 
 
 ## Installation
 
-To be written.
+Install this operator using Helm:
+
+```
+$ helm repo add mittwald https://helm.mittwald.de
+$ helm repo update
+$ kubectl create namespace kubeav-system
+$ helm install kubeav mittwald/kube-av --namespace kubeav-system
+```
 
 ## Architecture
 
