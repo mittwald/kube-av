@@ -2,5 +2,5 @@ apiVersion: v2
 name: kubeav
 description: AntiVirus automation for Kubernetes
 type: application
-version: 1.0.0-alpha2
-appVersion: v1.0.0-alpha2
+version: 1.0.0-alpha4
+appVersion: v1.0.0-alpha4
