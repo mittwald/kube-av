@@ -25,15 +25,15 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           securityContext: {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:v{{ .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args:
             {{- if .Values.clamav.enable }}
             - --engine-clamav-agent-image
-            - {{ .Values.clamav.agent.image.repository }}:v{{ .Chart.AppVersion }}
+            - {{ .Values.clamav.agent.image.repository }}:{{ .Chart.AppVersion }}
             - --engine-clamav-updater-image
             {{- with .Values.clamav.updater }}
-            - {{ .image.repository }}:v{{ $.Chart.AppVersion }}
+            - {{ .image.repository }}:{{ $.Chart.AppVersion }}
             - --engine-clamav-updater-cpu-request
             - {{ .resources.requests.cpu | quote}}
             - --engine-clamav-updater-cpu-limit
