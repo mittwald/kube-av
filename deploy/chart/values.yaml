@@ -1,6 +1,22 @@
 image:
-  repository: quay.io/mittwald/kubeav:v1
+  repository: quay.io/mittwald/kubeav
   pullPolicy: IfNotPresent
+
+clamav:
+  enable: true
+  agent:
+    image:
+      repository: quay.io/mittwald/kubeav-agent-clamav
+  updater:
+    image:
+      repository: quay.io/mittwald/kubeav-updater-clamav
+    resources:
+      requests:
+        cpu: 50m
+        memory: 256Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
 
 imagePullSecrets: []
 nameOverride: ""
