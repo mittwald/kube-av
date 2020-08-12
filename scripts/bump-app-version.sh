@@ -9,7 +9,7 @@ fi
 
 ## make this script a bit more re-usable
 GIT_REPOSITORY="github.com/mittwald/kube-av.git"
-CHART_YAML="./deploy/chart/Chart.yaml"
+CHART_YAML="./deploy/helm-chart/kubeav/Chart.yaml"
 
 ## avoid noisy shellcheck warnings
 MODE="${1}"
