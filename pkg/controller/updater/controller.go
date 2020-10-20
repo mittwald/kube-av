@@ -107,6 +107,8 @@ func (u *UpdaterController) reconcile(ctx context.Context) (reconcile.Result, er
 		return reconcile.Result{}, err
 	}
 
+	t := true
+
 	i := corev1.Container{
 		Name:    "chown",
 		Image:   "busybox",
@@ -115,6 +117,9 @@ func (u *UpdaterController) reconcile(ctx context.Context) (reconcile.Result, er
 			Name:      "clamdb",
 			MountPath: "/var/lib/clamav",
 		}},
+		SecurityContext: &corev1.SecurityContext{
+			Privileged: &t,
+		},
 	}
 
 	c := corev1.Container{}
