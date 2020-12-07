@@ -72,10 +72,10 @@ This operator consists of several components:
 
 ### Starting an AV scan on demand
 
-An on-demand scan is modelled using the `VirusScan` custom resource (API group `av.mittwald.systems/v1beta1`). In the `.spec` of a virus scan you can specify which files to scan and which engine to use (currently, only ClamAV is supported):
+An on-demand scan is modelled using the `VirusScan` custom resource (API group `av.mittwald.de/v1beta1`). In the `.spec` of a virus scan you can specify which files to scan and which engine to use (currently, only ClamAV is supported):
 
 ```yaml
-apiVersion: av.mittwald.systems/v1beta1
+apiVersion: av.mittwald.de/v1beta1
 kind: VirusScan
 metadata:
   name: example-virusscan
@@ -107,7 +107,7 @@ example-virusscan   Completed (1 infected files)   44s         11s         44s
 The `.status.scanResults` property in the CR lists the individual files found by the scanner:
 
 ```yaml
-apiVersion: av.mittwald.systems/v1beta1
+apiVersion: av.mittwald.de/v1beta1
 kind: VirusScan
 metadata:
   name: example-virusscan
@@ -134,7 +134,7 @@ status:
 Periodic scanning can be configured using the `ScheduledVirusScan` resource.
 
 ```yaml
-apiVersion: av.mittwald.systems/v1beta1
+apiVersion: av.mittwald.de/v1beta1
 kind: ScheduledVirusScan
 metadata:
   name: example-scheduledvirusscan

@@ -27,7 +27,7 @@ rules:
 - apiGroups: ["apps"]
   resources: [daemonsets]
   verbs: [list, watch, get]
-- apiGroups: ['av.mittwald.systems']
+- apiGroups: ['av.mittwald.de']
   resources:
     - virusscans
     - scheduledvirusscans
@@ -35,13 +35,13 @@ rules:
     - get
     - list
     - watch
-- apiGroups: ['av.mittwald.systems']
+- apiGroups: ['av.mittwald.de']
   resources:
     - virusscans
   verbs:
     - create
     - delete
-- apiGroups: ['av.mittwald.systems']
+- apiGroups: ['av.mittwald.de']
   resources:
     - virusscans/status
     - scheduledvirusscans/status

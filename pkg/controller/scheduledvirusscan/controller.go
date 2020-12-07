@@ -27,7 +27,7 @@ import (
 
 var log = logf.Log.WithName("controller_scheduledvirusscan")
 
-const labelScheduledBy = "kubeav.mittwald.systems/scheduled-by"
+const labelScheduledBy = "kubeav.mittwald.de/scheduled-by"
 
 // Add creates a new ScheduledVirusScan Controller and adds it to the Manager. The Manager will set fields on the Controller
 // and Start it when the Manager is Started.

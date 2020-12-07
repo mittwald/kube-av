@@ -1,9 +1,9 @@
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  name: scheduledvirusscans.av.mittwald.systems
+  name: scheduledvirusscans.av.mittwald.de
 spec:
-  group: av.mittwald.systems
+  group: av.mittwald.de
   names:
     kind: ScheduledVirusScan
     listKind: ScheduledVirusScanList
