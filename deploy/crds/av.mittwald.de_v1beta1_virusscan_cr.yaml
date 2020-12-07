@@ -1,4 +1,4 @@
-apiVersion: av.mittwald.systems/v1beta1
+apiVersion: av.mittwald.de/v1beta1
 kind: VirusScan
 metadata:
   name: example-virusscan

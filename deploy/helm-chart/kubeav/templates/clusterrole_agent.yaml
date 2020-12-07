@@ -16,7 +16,7 @@ rules:
   - get
   - watch
 - apiGroups:
-  - av.mittwald.systems
+  - av.mittwald.de
   resources:
   - virusscans
   verbs:
@@ -24,7 +24,7 @@ rules:
   - list
   - watch
 - apiGroups:
-  - av.mittwald.systems
+  - av.mittwald.de
   resources:
   - virusscans/status
   verbs:
