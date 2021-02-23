@@ -32,5 +32,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_USER_TOKEN }}
 
-      - name: Bump Chart Version
-        run: bash ./scripts/bump-app-version.sh publish "${GITHUB_REF##*/}" "${{ secrets.RELEASE_USER_TOKEN }}"
+      - name: Run chart version bump
+        uses: mittwald/bump-app-version-action@v1
+        with:
+          mode: 'publish'
+          chartYaml: './deploy/helm-chart/kubeav/Chart.yaml'
+        env:
+          GITHUB_TOKEN: "${{ secrets.RELEASE_USER_TOKEN }}"
+          HELM_REPO_PASSWORD: "${{ secrets.HELM_REPO_PASSWORD }}"
