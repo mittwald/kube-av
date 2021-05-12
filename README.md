@@ -32,7 +32,7 @@ Install this operator using Helm:
 $ helm repo add mittwald https://helm.mittwald.de
 $ helm repo update
 $ kubectl create namespace kubeav-system
-$ helm install kubeav mittwald/kube-av --namespace kubeav-system
+$ helm install kubeav mittwald/kubeav --namespace kubeav-system
 ```
 
 ## Architecture
