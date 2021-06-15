@@ -62,7 +62,7 @@ jobs:
 #          prefix: 'github.com/${{ github.repository }}/'
 
       - name: Go Test
-        run: go test -coverprofile=c.out ./...
+        run: make test
 
   build:
     name: Build Image
