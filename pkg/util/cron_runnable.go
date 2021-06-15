@@ -1,6 +1,12 @@
 package util
 
-import "github.com/robfig/cron/v3"
+import (
+	"context"
+	"github.com/robfig/cron/v3"
+	"sigs.k8s.io/controller-runtime/pkg/manager"
+)
+
+var _ manager.Runnable = &CronRunnable{}
 
 type CronRunnable struct {
 	cron *cron.Cron
@@ -10,10 +16,10 @@ func NewCronRunnable(c *cron.Cron) *CronRunnable {
 	return &CronRunnable{c}
 }
 
-func (c *CronRunnable) Start(i <-chan struct{}) error {
+func (c *CronRunnable) Start(ctx context.Context) error {
 	c.cron.Start()
 
-	<-i
+	<-ctx.Done()
 	stopCtx := c.cron.Stop()
 
 	<-stopCtx.Done()

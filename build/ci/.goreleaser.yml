@@ -5,7 +5,7 @@ builds:
       - CGO_ENABLED=0
       - GO111MODULE=on
     binary: kubeav
-    main: ./cmd/manager/main.go
+    main: ./main.go
     goos: [linux]
     goarch: [amd64]
   - id: kubeav-agent

@@ -1,0 +1,7 @@
+apiVersion: av.mittwald.de/v1beta1
+kind: VirusScan
+metadata:
+  name: virusscan-sample
+spec:
+  # Add fields here
+  foo: bar

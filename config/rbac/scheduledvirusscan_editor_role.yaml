@@ -1,0 +1,24 @@
+# permissions for end users to edit scheduledvirusscans.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: scheduledvirusscan-editor-role
+rules:
+- apiGroups:
+  - av.mittwald.de
+  resources:
+  - scheduledvirusscans
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - av.mittwald.de
+  resources:
+  - scheduledvirusscans/status
+  verbs:
+  - get
