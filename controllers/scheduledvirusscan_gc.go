@@ -2,11 +2,12 @@ package controllers
 
 import (
 	"context"
+	"sort"
+
 	"github.com/go-logr/logr"
 	avv1beta1 "github.com/mittwald/kube-av/api/v1beta1"
 	corev1 "k8s.io/api/core/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-	"sort"
 )
 
 func (r *ScheduledVirusScanReconciler) runGarbageCollection(ctx context.Context, svs *avv1beta1.ScheduledVirusScan, l logr.Logger) error {
@@ -46,4 +47,3 @@ func (r *ScheduledVirusScanReconciler) runGarbageCollection(ctx context.Context,
 
 	return nil
 }
-

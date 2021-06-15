@@ -3,6 +3,7 @@ package controllers
 import (
 	"context"
 	"fmt"
+
 	"github.com/robfig/cron/v3"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -29,7 +30,7 @@ const labelScheduledBy = "kubeav.mittwald.de/scheduled-by"
 // ScheduledVirusScanReconciler reconciles a ScheduledVirusScan object
 type ScheduledVirusScanReconciler struct {
 	client.Client
-	Scheme *runtime.Scheme
+	Scheme      *runtime.Scheme
 	Recorder    record.EventRecorder
 	Cron        *cron.Cron
 	CronEntries map[string]CronEntry

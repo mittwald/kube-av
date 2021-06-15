@@ -2,11 +2,12 @@ package main
 
 import (
 	"flag"
+	"os"
+
 	"github.com/mittwald/kube-av/pkg/engine"
 	"github.com/mittwald/kube-av/pkg/util"
 	"github.com/robfig/cron/v3"
 	"github.com/spf13/pflag"
-	"os"
 
 	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
 	// to ensure that exec-entrypoint and run can make use of them.

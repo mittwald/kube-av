@@ -2,9 +2,10 @@ package controllers
 
 import (
 	"context"
+	"time"
+
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
-	"time"
 
 	"github.com/mittwald/kube-av/pkg/engine"
 
