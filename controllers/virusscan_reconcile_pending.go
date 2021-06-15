@@ -7,12 +7,10 @@ import (
 	avv1beta1 "github.com/mittwald/kube-av/api/v1beta1"
 	"github.com/mittwald/kube-av/pkg/engine"
 	"github.com/mittwald/kube-av/pkg/labels"
-	"gopkg.in/yaml.v3"
 	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/types"
-	"os"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 )
@@ -96,8 +94,6 @@ func (r *VirusScanReconciler) reconcilePending(ctx context.Context, s *avv1beta1
 	if err := controllerutil.SetControllerReference(s, &job, r.Scheme); err != nil {
 		return reconcile.Result{}, err
 	}
-
-	yaml.NewEncoder(os.Stdout).Encode(&job)
 
 	l.Info("upserting batch job")
 	if err := r.upsert(ctx, &job); err != nil {
