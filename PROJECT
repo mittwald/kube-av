@@ -1,6 +1,7 @@
 domain: mittwald.de
 layout:
 - go.kubebuilder.io/v3
+multigroup: true
 plugins:
   manifests.sdk.operatorframework.io/v2: {}
   scorecard.sdk.operatorframework.io/v2: {}
@@ -14,7 +15,7 @@ resources:
   domain: mittwald.de
   group: av
   kind: VirusScan
-  path: github.com/mittwald/kube-av/api/v1beta1
+  path: github.com/mittwald/kube-av/apis/v1beta1
   version: v1beta1
 - api:
     crdVersion: v1
@@ -23,6 +24,6 @@ resources:
   domain: mittwald.de
   group: av
   kind: ScheduledVirusScan
-  path: github.com/mittwald/kube-av/api/v1beta1
+  path: github.com/mittwald/kube-av/apis/v1beta1
   version: v1beta1
 version: "3"

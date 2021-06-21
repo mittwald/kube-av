@@ -1,6 +1,6 @@
 package controllers
 
-import avv1beta1 "github.com/mittwald/kube-av/api/v1beta1"
+import avv1beta1 "github.com/mittwald/kube-av/apis/v1beta1"
 
 type scanList []avv1beta1.VirusScan
 

@@ -13,7 +13,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	avv1beta1 "github.com/mittwald/kube-av/api/v1beta1"
+	avv1beta1 "github.com/mittwald/kube-av/apis/v1beta1"
 )
 
 // VirusScanReconciler reconciles a VirusScan object
