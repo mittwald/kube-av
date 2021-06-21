@@ -90,8 +90,8 @@ spec:
     # a PodSpec.
     - volume:
         persistentVolumeClaim:
-            path: my-pvc
-        subPath: path/to/subdir
+          claimName: my-pvc
+      subPath: path/to/subdir
 ```
 
 A `VirusScan` resource will be mapped to a `Job` (of the `batch/v1` API group), which will in turn result in a Pod that runs the configured AV engine and that has all the specified volumes mounted.

@@ -1,0 +1,5 @@
+## Append samples you want in your CSV to this file as resources ##
+resources:
+- av_v1beta1_virusscan.yaml
+- av_v1beta1_scheduledvirusscan.yaml
+#+kubebuilder:scaffold:manifestskustomizesamples

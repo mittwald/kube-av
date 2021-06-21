@@ -6,9 +6,8 @@ import (
 	"os"
 	"strings"
 
-	kubeavapis "github.com/mittwald/kube-av/pkg/apis"
-	avv1beta1 "github.com/mittwald/kube-av/pkg/apis/av/v1beta1"
-	"github.com/mittwald/kube-av/pkg/controller/virusscan"
+	avv1beta1 "github.com/mittwald/kube-av/api/v1beta1"
+	"github.com/mittwald/kube-av/controllers"
 	"github.com/mittwald/kube-av/pkg/engine"
 	"github.com/pkg/errors"
 	"github.com/urfave/cli/v2"
@@ -55,7 +54,7 @@ func main() {
 				return err
 			}
 
-			if err := kubeavapis.AddToScheme(s); err != nil {
+			if err := avv1beta1.AddToScheme(s); err != nil {
 				return err
 			}
 
@@ -112,7 +111,7 @@ func main() {
 				r.Eventf(&scan, corev1.EventTypeWarning, "InfectionFound", "found %d infected files", len(result.InfectedFiles))
 			}
 
-			patch := virusscan.PatchVirusScanResult{ScanReport: result}
+			patch := controllers.PatchVirusScanResult{ScanReport: result}
 			if err := client.Status().Patch(ctx, &scan, &patch); err != nil {
 				return err
 			}

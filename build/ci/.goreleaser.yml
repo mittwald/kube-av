@@ -5,7 +5,7 @@ builds:
       - CGO_ENABLED=0
       - GO111MODULE=on
     binary: kubeav
-    main: ./cmd/manager/main.go
+    main: ./main.go
     goos: [linux]
     goarch: [amd64]
   - id: kubeav-agent
@@ -34,9 +34,7 @@ dockers:
       - quay.io/mittwald/kubeav:{{ .Tag }}
       - quay.io/mittwald/kubeav:stable
     dockerfile: build/package/docker/operator.Dockerfile
-    extra_files:
-      - build/bin
-    binaries:
+    ids:
       - kubeav
     goos: linux
     goarch: amd64
@@ -47,7 +45,7 @@ dockers:
       - quay.io/mittwald/kubeav-agent-clamav:{{ .Tag }}
       - quay.io/mittwald/kubeav-agent-clamav:stable
     dockerfile: build/package/docker/agent-clamav.Dockerfile
-    binaries:
+    ids:
       - kubeav-agent
     goos: linux
     goarch: amd64
