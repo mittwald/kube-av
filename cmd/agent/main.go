@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	avv1beta1 "github.com/mittwald/kube-av/api/v1beta1"
+	avv1beta1 "github.com/mittwald/kube-av/apis/av/v1beta1"
 	"github.com/mittwald/kube-av/controllers"
 	"github.com/mittwald/kube-av/pkg/engine"
 	"github.com/pkg/errors"

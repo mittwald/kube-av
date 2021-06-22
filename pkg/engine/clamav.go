@@ -1,9 +1,10 @@
 package engine
 
 import (
-	avv1beta1 "github.com/mittwald/kube-av/api/v1beta1"
 	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
+
+	avv1beta1 "github.com/mittwald/kube-av/apis/av/v1beta1"
 )
 
 type clamAVEngine struct{}
