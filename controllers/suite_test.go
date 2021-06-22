@@ -14,7 +14,7 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	avv1beta1 "github.com/mittwald/kube-av/apis/v1beta1"
+	avv1beta1 "github.com/mittwald/kube-av/apis/av/v1beta1"
 	//+kubebuilder:scaffold:imports
 )
 

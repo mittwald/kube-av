@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	avv1beta1 "github.com/mittwald/kube-av/apis/v1beta1"
+	avv1beta1 "github.com/mittwald/kube-av/apis/av/v1beta1"
 	"github.com/mittwald/kube-av/pkg/engine"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

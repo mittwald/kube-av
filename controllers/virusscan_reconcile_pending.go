@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/go-logr/logr"
-	avv1beta1 "github.com/mittwald/kube-av/apis/v1beta1"
+	avv1beta1 "github.com/mittwald/kube-av/apis/av/v1beta1"
 	"github.com/mittwald/kube-av/pkg/engine"
 	"github.com/mittwald/kube-av/pkg/labels"
 	batchv1 "k8s.io/api/batch/v1"

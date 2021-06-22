@@ -9,7 +9,7 @@ import (
 	"regexp"
 	"strings"
 
-	avv1beta1 "github.com/mittwald/kube-av/apis/v1beta1"
+	avv1beta1 "github.com/mittwald/kube-av/apis/av/v1beta1"
 )
 
 var matchRE *regexp.Regexp

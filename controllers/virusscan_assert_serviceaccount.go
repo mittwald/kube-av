@@ -3,7 +3,7 @@ package controllers
 import (
 	"context"
 
-	avv1beta1 "github.com/mittwald/kube-av/apis/v1beta1"
+	avv1beta1 "github.com/mittwald/kube-av/apis/av/v1beta1"
 	corev1 "k8s.io/api/core/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
