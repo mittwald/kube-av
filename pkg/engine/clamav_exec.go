@@ -21,7 +21,7 @@ func init() {
 func (c *clamAVEngine) Execute(ctx context.Context, _ *avv1beta1.VirusScan, scanDirs []string) (*ScanReport, error) {
 	stdout := bytes.Buffer{}
 
-	args := []string{"-i", "--no-summary"}
+	args := []string{"-i", "--no-summary", "--recursive"}
 	args = append(args, scanDirs...)
 
 	tee := io.MultiWriter(&stdout, os.Stdout)
